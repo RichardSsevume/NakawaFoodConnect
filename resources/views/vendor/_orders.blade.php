@@ -1,0 +1,5 @@
+<div class="card tw"><table class="table"><tr><th>Code</th><th>Student</th><th>Hostel</th><th>Total</th><th>Pay</th><th>Status</th><th>Action</th></tr>
+@forelse($orders as $o)<tr><td><a href="{{ route('order.show', $o) }}">{{ $o->code }}</a></td><td>{{ $o->student->name }}</td><td>{{ $o->hostel->name }}</td><td>{{ number_format($o->total) }}</td>
+<td>{{ strtoupper(str_replace('_', ' ', $o->payment_method)) }}<br>{{ $o->payment_status }}@if($o->payment_status !== 'paid')<form method="POST" action="{{ route('vendor.paid', $o) }}">@csrf<button class="linkbtn">Mark paid</button></form>@endif</td>
+<td>@include('partials.status', ['s' => $o->status])</td><td>@foreach(\App\Models\Order::FLOW[$o->status] ?? [] as $n)<form method="POST" action="{{ route('vendor.status', $o) }}" class="inl">@csrf<input type="hidden" name="to" value="{{ $n }}"><button class="btn sm {{ $n === 'rejected' ? 'danger' : '' }}">{{ ucwords(str_replace('_', ' ', $n)) }}</button></form>@endforeach</td></tr>
+@empty<tr><td colspan="7">No orders.</td></tr>@endforelse</table></div>

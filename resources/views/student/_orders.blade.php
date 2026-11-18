@@ -1,0 +1,3 @@
+<div class="card tw"><table class="table"><tr><th>Code</th><th>Restaurant</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr>
+@forelse($orders as $o)<tr><td>{{ $o->code }}</td><td>{{ $o->vendor->name }}</td><td>UGX {{ number_format($o->total) }}</td><td>@include('partials.status', ['s' => $o->status])</td><td>{{ $o->created_at->format('d M H:i') }}</td>
+<td><a href="{{ route('order.show', $o) }}">Details</a>@if($o->status === 'pending')<form method="POST" action="{{ route('student.cancel', $o) }}" class="inl">@csrf<button class="linkbtn">Cancel</button></form>@endif</td></tr>@empty<tr><td colspan="6">No orders yet.</td></tr>@endforelse</table></div>
